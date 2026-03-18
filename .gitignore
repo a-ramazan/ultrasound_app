@@ -63,3 +63,10 @@ linux/flutter/ephemeral/
 # Local helper scripts
 run_windows_safe.bat
 run_windows_safe.ps1
+
+
+
+
+# mine
+.vscode
+.metadata
