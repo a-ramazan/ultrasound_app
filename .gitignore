@@ -68,5 +68,5 @@ run_windows_safe.ps1
 
 
 # mine
-.vscode
+.vscode/
 .metadata
