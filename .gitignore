@@ -32,6 +32,9 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+.dart_tool/
+.packages
+pubspec_overrides.yaml
 
 # Symbolication related
 app.*.symbols
@@ -43,3 +46,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local machine/project files
+android/local.properties
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/
+linux/flutter/generated_plugin_registrant.*
+linux/flutter/generated_plugins.cmake
+windows/flutter/generated_plugin_registrant.*
+windows/flutter/generated_plugins.cmake
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+
+# Local helper scripts
+run_windows_safe.bat
+run_windows_safe.ps1
