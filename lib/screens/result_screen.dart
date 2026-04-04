@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 
 import '../models/analysis_result.dart';
@@ -10,21 +8,23 @@ import '../widgets/image_preview_card.dart';
 import '../widgets/primary_action_button.dart';
 import 'upload_screen.dart';
 
-class ResultScreen extends StatelessWidget {
-  const ResultScreen({
-    super.key,
-    required this.imageBytes,
-    required this.result,
-  });
+class ResultScreen extends StatefulWidget {
+  const ResultScreen({super.key, required this.result});
 
-  final Uint8List imageBytes;
   final AnalysisResult result;
+
+  @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  bool _showOverlay = true;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final result = widget.result;
     final statusColor = result.isNormal ? AppColors.success : AppColors.warning;
-    final statusText = result.isNormal ? 'Норма' : 'Патология';
 
     return GradientScaffold(
       bottomNavigationBar: SafeArea(
@@ -43,7 +43,7 @@ class ResultScreen extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final compact = constraints.maxHeight < 780;
-          final previewHeight = compact ? 180.0 : 220.0;
+          final previewHeight = compact ? 190.0 : 240.0;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
@@ -82,7 +82,7 @@ class ResultScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              statusText,
+                              result.label,
                               style: const TextStyle(
                                 color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w700,
@@ -100,13 +100,45 @@ class ResultScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Сегментированная область и измеренная толщина стенки кишечника представлены ниже.',
+                    'Сервер выполнил сегментацию выделенной области и предсказал класс для выбранного ROI.',
                     style: theme.textTheme.bodyLarge,
                   ),
-                  SizedBox(height: compact ? 16 : 20),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SegmentedButton<bool>(
+                          showSelectedIcon: false,
+                          segments: const [
+                            ButtonSegment<bool>(
+                              value: true,
+                              label: Text('Сегментация'),
+                            ),
+                            ButtonSegment<bool>(
+                              value: false,
+                              label: Text('Оригинал'),
+                            ),
+                          ],
+                          selected: {_showOverlay},
+                          onSelectionChanged: (selection) {
+                            setState(() {
+                              _showOverlay = selection.first;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   ImagePreviewCard(
-                    imageBytes: imageBytes,
+                    imageBytes: _showOverlay
+                        ? result.overlayImageBytes
+                        : result.originalImageBytes,
                     height: previewHeight,
+                    badgeLabel: _showOverlay
+                        ? 'Segmented ultrasound'
+                        : 'Original image',
+                    fit: BoxFit.contain,
                   ),
                   SizedBox(height: compact ? 16 : 20),
                   GlassPanel(
@@ -123,7 +155,7 @@ class ResultScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Text(
-                            statusText,
+                            result.label,
                             style: const TextStyle(
                               color: AppColors.textPrimary,
                               fontWeight: FontWeight.w700,
@@ -132,7 +164,9 @@ class ResultScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 18),
                         Text(
-                          result.summary,
+                          result.isNormal
+                              ? 'ROI классифицирован как норма'
+                              : 'ROI классифицирован как патология',
                           style: theme.textTheme.headlineMedium,
                         ),
                         const SizedBox(height: 18),
@@ -140,9 +174,8 @@ class ResultScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _MetricCard(
-                                label: 'Толщина стенки',
-                                value:
-                                    '${result.wallThicknessMm.toStringAsFixed(1)} мм',
+                                label: 'Предсказанный класс',
+                                value: result.predictedClass,
                                 accentColor: statusColor,
                               ),
                             ),
@@ -186,22 +219,6 @@ class ResultScreen extends StatelessWidget {
                         Text(
                           result.explanation,
                           style: theme.textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: compact ? 16 : 20),
-                  GlassPanel(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Критерий оценки',
-                          style: theme.textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Если толщина стенки менее 3 мм, результат интерпретируется как норма. Значение более 3 мм указывает на патологические изменения.',
                         ),
                       ],
                     ),
@@ -250,7 +267,7 @@ class _MetricCard extends StatelessWidget {
             value,
             style: TextStyle(
               color: accentColor,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w800,
             ),
           ),

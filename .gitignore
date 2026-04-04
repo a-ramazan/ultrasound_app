@@ -70,3 +70,9 @@ run_windows_safe.ps1
 # mine
 .vscode/
 .metadata
+/.venv/
+
+# Python backend
+backend/.venv/
+backend/**/__pycache__/
+backend/**/*.py[cod]

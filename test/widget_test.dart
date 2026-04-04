@@ -8,8 +8,9 @@ void main() {
   ) async {
     await tester.pumpWidget(const UltrasoundApp());
 
-    expect(find.text('SonoBowel'), findsOneWidget);
+    expect(find.text('SonoBowel'), findsWidgets);
     expect(find.text('Выбрать из галереи'), findsOneWidget);
     expect(find.text('Сделать фото'), findsOneWidget);
+    expect(find.text('Загрузите УЗИ-изображение'), findsOneWidget);
   });
 }

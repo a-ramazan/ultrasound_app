@@ -3,11 +3,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../models/analysis_result.dart';
 import '../theme/app_colors.dart';
 import '../widgets/gradient_scaffold.dart';
 import '../widgets/primary_action_button.dart';
-import 'result_screen.dart';
+import 'roi_selection_screen.dart';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
@@ -17,33 +16,6 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  static const List<AnalysisResult> _results = [
-    AnalysisResult(
-      summary: 'Норма',
-      wallThicknessMm: 2.4,
-      confidence: 96,
-      explanation:
-          'Толщина стенки кишечника менее 3 мм. Показатель находится в пределах нормы.',
-      isNormal: true,
-    ),
-    AnalysisResult(
-      summary: 'Патологическое утолщение стенки',
-      wallThicknessMm: 4.2,
-      confidence: 91,
-      explanation:
-          'Толщина стенки кишечника превышает 3 мм. Рекомендуется клиническая оценка специалистом.',
-      isNormal: false,
-    ),
-    AnalysisResult(
-      summary: 'Патологическое утолщение стенки',
-      wallThicknessMm: 5.1,
-      confidence: 88,
-      explanation:
-          'Выявлено увеличение толщины стенки кишечника более 3 мм, что соответствует патологическим изменениям.',
-      isNormal: false,
-    ),
-  ];
-
   final ImagePicker _picker = ImagePicker();
   bool _isPicking = false;
 
@@ -66,15 +38,13 @@ class _UploadScreenState extends State<UploadScreen> {
       }
 
       final Uint8List bytes = await image.readAsBytes();
-      final result = _results[DateTime.now().millisecond % _results.length];
-
       if (!mounted) {
         return;
       }
 
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => ResultScreen(imageBytes: bytes, result: result),
+          builder: (_) => RoiSelectionScreen(imageBytes: bytes),
         ),
       );
     } finally {
@@ -127,7 +97,7 @@ class _UploadScreenState extends State<UploadScreen> {
                         children: [
                           Text('SonoBowel', style: theme.textTheme.titleLarge),
                           Text(
-                            'Анализ стенки кишечника',
+                            'Bowel ultrasound',
                             style: theme.textTheme.bodyMedium,
                           ),
                         ],
@@ -164,7 +134,7 @@ class _UploadScreenState extends State<UploadScreen> {
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: const Text(
-                            'Bowel wall thickness screening',
+                            'SonoBowel',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
@@ -175,7 +145,7 @@ class _UploadScreenState extends State<UploadScreen> {
                         Text('Загрузите УЗИ-изображение', style: titleStyle),
                         SizedBox(height: compact ? 10 : 16),
                         Text(
-                          'После выбора снимка приложение покажет сегментацию стенки, измеренную толщину и уверенность результата.',
+                          'Выберите изображение и выделите область интереса на следующем экране.',
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: Colors.white.withValues(alpha: 0.92),
                           ),
@@ -198,14 +168,14 @@ class _UploadScreenState extends State<UploadScreen> {
                                 ),
                                 alignment: Alignment.center,
                                 child: const Icon(
-                                  Icons.straighten_rounded,
+                                  Icons.crop_free_rounded,
                                   color: Colors.white,
                                 ),
                               ),
                               const SizedBox(width: 14),
                               Expanded(
                                 child: Text(
-                                  'Порог нормы: толщина стенки менее 3 мм',
+                                  'Выделите область интереса на следующем экране.',
                                   style: theme.textTheme.titleMedium?.copyWith(
                                     color: Colors.white,
                                   ),

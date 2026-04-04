@@ -10,10 +10,14 @@ class ImagePreviewCard extends StatelessWidget {
     super.key,
     required this.imageBytes,
     this.height = 360,
+    this.badgeLabel = 'Segmented ultrasound',
+    this.fit = BoxFit.contain,
   });
 
   final Uint8List imageBytes;
   final double height;
+  final String badgeLabel;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class ImagePreviewCard extends StatelessWidget {
           children: [
             Image.memory(
               imageBytes,
-              fit: BoxFit.cover,
+              fit: fit,
               errorBuilder: (context, error, stackTrace) {
                 return const Center(
                   child: Text(
@@ -68,18 +72,18 @@ class ImagePreviewCard extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.82),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.shield_outlined,
                       size: 16,
                       color: AppColors.primaryDark,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
-                      'Segmented ultrasound',
-                      style: TextStyle(
+                      badgeLabel,
+                      style: const TextStyle(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w700,
                       ),
