@@ -143,47 +143,7 @@ class _UploadScreenState extends State<UploadScreen> {
                         ),
                         SizedBox(height: compact ? 16 : 20),
                         Text('Загрузите УЗИ-изображение', style: titleStyle),
-                        SizedBox(height: compact ? 10 : 16),
-                        Text(
-                          'Выберите изображение и выделите область интереса на следующем экране.',
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.92),
-                          ),
-                        ),
                         const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.all(18),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.14),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: compact ? 44 : 52,
-                                height: compact ? 44 : 52,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.16),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                alignment: Alignment.center,
-                                child: const Icon(
-                                  Icons.crop_free_rounded,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(width: 14),
-                              Expanded(
-                                child: Text(
-                                  'Выделите область интереса на следующем экране.',
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),

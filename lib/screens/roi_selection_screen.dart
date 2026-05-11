@@ -55,10 +55,10 @@ class _RoiSelectionScreenState extends State<RoiSelectionScreen> {
     setState(() => _isAnalyzing = true);
 
     try {
-      final roi = RoiBox.fromRect(_displayRoi!);
+      final area = RoiBox.fromRect(_displayRoi!);
       final result = await _api.analyze(
         imageBytes: widget.imageBytes,
-        roi: roi,
+        roi: area,
       );
 
       if (!mounted) {
@@ -120,7 +120,7 @@ class _RoiSelectionScreenState extends State<RoiSelectionScreen> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: const Text(
-                      'ROI',
+                      'Область интереса',
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w700,
@@ -130,15 +130,7 @@ class _RoiSelectionScreenState extends State<RoiSelectionScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              Text(
-                'Настройте область интереса',
-                style: theme.textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Прямоугольник уже установлен. Перемещайте его или меняйте размер за углы.',
-                style: theme.textTheme.bodyLarge,
-              ),
+              Text('Область интереса', style: theme.textTheme.headlineMedium),
               const SizedBox(height: 20),
               GlassPanel(
                 padding: const EdgeInsets.all(12),

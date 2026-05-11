@@ -98,11 +98,6 @@ class _ResultScreenState extends State<ResultScreen> {
                     'Результат анализа',
                     style: theme.textTheme.headlineMedium,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Сервер выполнил сегментацию выделенной области и предсказал класс для выбранного ROI.',
-                    style: theme.textTheme.bodyLarge,
-                  ),
                   const SizedBox(height: 18),
                   Row(
                     children: [
@@ -136,8 +131,8 @@ class _ResultScreenState extends State<ResultScreen> {
                         : result.originalImageBytes,
                     height: previewHeight,
                     badgeLabel: _showOverlay
-                        ? 'Segmented ultrasound'
-                        : 'Original image',
+                        ? 'Сегментация'
+                        : 'Оригинальное изображение',
                     fit: BoxFit.contain,
                   ),
                   SizedBox(height: compact ? 16 : 20),
@@ -163,18 +158,11 @@ class _ResultScreenState extends State<ResultScreen> {
                           ),
                         ),
                         const SizedBox(height: 18),
-                        Text(
-                          result.isNormal
-                              ? 'ROI классифицирован как норма'
-                              : 'ROI классифицирован как патология',
-                          style: theme.textTheme.headlineMedium,
-                        ),
-                        const SizedBox(height: 18),
                         Row(
                           children: [
                             Expanded(
                               child: _MetricCard(
-                                label: 'Предсказанный класс',
+                                label: 'Класс',
                                 value: result.predictedClass,
                                 accentColor: statusColor,
                               ),
@@ -188,37 +176,6 @@ class _ResultScreenState extends State<ResultScreen> {
                               ),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 18),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 14,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.analytics_outlined,
-                                color: AppColors.primaryDark,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'Уверенность результата: ${result.confidence}%',
-                                  style: theme.textTheme.titleMedium,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          result.explanation,
-                          style: theme.textTheme.bodyLarge,
                         ),
                       ],
                     ),
